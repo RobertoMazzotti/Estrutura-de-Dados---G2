@@ -75,31 +75,36 @@ no_arv * pesquisa_nodo(no_arv * arvore, int info){
              }
         return NULL;
      }
-
 }
-
-int pesquisa (){
-    int pesquisa;
+int pesquisa_info (){
+    int info;
     printf("Digite o numero:");
-    scanf("%d",&pesquisa);
-    return pesquisa;
+    scanf("%d",&info);
+    return info;
 }
-int nivel_do_nodo(no_arv * arv, char info){
-     if(arvore!=NULL){
+int nivel_do_nodo(no_arv * arvore, int info,int nivel){
+     printf("Nivel raiz: %d\n",nivel);
+    if(arvore!=NULL){
         if(arvore->info == info){
-                return 1;
+                return nivel;
              }
-        if(pesquisa_nodo(arvore->esquerda,info)== 1){
-           return 1;
-           }
-        if(pesquisa_nodo(arvore->direita,info)== 1){
-           return 1;
-             }
-        return NULL;
-     }
+            if(arvore->esquerda!=NULL){
+                printf("esquerda\n");
+                nivel ++;
+                nivel_do_nodo(arvore->esquerda,info,nivel);
+                return nivel;
+            }
+            if(arvore->direita!=NULL){
+                printf("direita\n");
+                nivel ++;
+               nivel_do_nodo(arvore->direita,info,nivel++);
+               return nivel;
 
+             }
+        }
+
+        return nivel;
      }
-}
 void busca_vetor(int vet[]){
     no_arv * arvore=NULL;
     no_arv * novo =NULL;
@@ -117,13 +122,14 @@ int main(){
 int pesquisa,pesquisa2 ,op = 1;
 int vet[9]={8, 3, 10, 1, 6, 14, 4, 7, 13};
   int nivel = 0;
-  int info ;
+  int info,aux,aux2 ;
   no_arv * arvore = NULL;
   no_arv * novo = NULL;
   do{
         monta_menu();
         scanf("%d", &op);
         system("cls");
+
         switch(op){
             case 1:
                 printf("Informe a letra a inserir na arvore: \n");
@@ -147,17 +153,20 @@ int vet[9]={8, 3, 10, 1, 6, 14, 4, 7, 13};
                busca_vetor(vet);
                break;
             case 6:
-                pesquisa(pesquisa);
-                pesquisa2=pesquisa_nodo(arvore,pesquisa);
-                if(pesquisa2 == 1){
-                    printf("O elemento %d existe na arvore\n",pesquisa);
+                info=pesquisa_info();
+                aux2=pesquisa_nodo(arvore,info);
+                if(aux2 == 1){
+                    printf("O elemento %d existe na arvore\n",info);
                 }else{
                     printf("O elemento nao existe na arvore\n");
                  }
                  break;
             case 7:
-                pesquisa=pesquisa();
-                nivel_do_nodo(arvore,pesquisa);
+                nivel=0;
+                info=pesquisa_info();
+                nivel=nivel_do_nodo(arvore,info,nivel);
+
+                printf("O nivel do nodo %d eh %d\n",info,nivel);
         }
     }while (op != 0);
 }
